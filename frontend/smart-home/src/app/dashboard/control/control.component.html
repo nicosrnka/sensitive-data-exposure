@@ -1,55 +1,29 @@
 <div class="container mt-3">
-    <div class="row">
-        <div class="col-md-4">
-            <div class="card text-center">
-                <h2>Change heater</h2>
-                <h3>{{heaterHeat}}°C</h3>
-                <button (click)="changeHeat('+')">+</button>
-                <button (click)="changeHeat('-')">-</button>
-
-                <button class="mt-3">Apply</button>
-            </div>
-        </div>
-        <div class="col-md-4">
+    <div class="row" >
+        <div class="col-md-4" *ngFor="let temp of tempList">
             <div class="card text-center centering">
-                <h2>Bathtub</h2>
-
-                <div class="dot green" *ngIf="bathTubStatus" (click)="changeBathTubeStatus()">
+                <h2>{{temp.name}}</h2>
+                <div class="dot green" *ngIf="temp.status" (click)="changeTempStatus(temp.id)">
                 </div>
-                <div class="dot red" *ngIf="!bathTubStatus" (click)="changeBathTubeStatus()">
+                <div class="dot red" *ngIf="!temp.status" (click)="changeTempStatus(temp.id)">
                 </div>
+                <h3>{{temp.temp}}°C</h3>
+                <button class="w-100" (click)="changeTemp('+', temp.id)">+</button>
+                <button class="w-100" (click)="changeTemp('-', temp.id)">-</button>
 
-                <h3>{{bathTubHeat}}°C</h3>
-                <button class="w-100" (click)="changeBathTubHeat('+')">+</button>
-                <button class="w-100" (click)="changeBathTubHeat('-')">-</button>
-                <button class="mt-3 w-100">Apply</button>
+                <button class="mt-3" class="w-100" (click)="applyChanges('t', temp.id)">Apply</button>
             </div>
         </div>
-        <div class="col-md-4">
+    </div>
+    <div class="row mt-3" >
+        <div class="col-md-4" *ngFor="let onOff of onOffList">
             <div class="card text-center centering">
-                <h2>Oven</h2>
-                <div class="dot green" *ngIf="ovenStatus" (click)="changeOvenStatus()">
+                <h2>{{onOff.name}}</h2>
+                <div class="dot green" *ngIf="onOff.status" (click)="changeOnOffStatus(onOff.id)">
                 </div>
-                <div class="dot red" *ngIf="!ovenStatus" (click)="changeOvenStatus()">
+                <div class="dot red" *ngIf="!onOff.status" (click)="changeOnOffStatus(onOff.id)">
                 </div>
-
-                <h3>{{ovenHeat}}°C</h3>
-                <button class="w-100" (click)="changeOvenHeat('+')">+</button>
-                <button class="w-100" (click)="changeOvenHeat('-')">-</button>
-                <button class="mt-3 w-100">Apply</button>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card text-center">
-                <h2>Custom Controls</h2>
-                <input type="text" formControlName="addInput"> <button type="button" (click)="addCustomControl()">Add</button>
-                <ul class="list-group" *ngFor="let item of controlList">
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                      {{item.name}}
-                      <span class="badge badge-primary badge-pill">X</span>
-                      <span class="badge badge-primary badge-pill">X</span>
-                    </li>
-                  </ul>
+                <button class="mt-3" class="w-100" (click)="applyChanges('o', onOff.id)">Apply</button>
             </div>
         </div>
     </div>

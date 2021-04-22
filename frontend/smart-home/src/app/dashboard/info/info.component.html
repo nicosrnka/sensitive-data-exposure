@@ -1,25 +1,24 @@
 <div class="container mt-3">
-    <div class="row">
-        <div class="col-md-4">
-            <div class="card text-center">
-                <h2>Temp. Living room</h2>
-                <h3>30°C</h3>
+    <div class="row" >
+        <div class="col-md-4" *ngFor="let temp of tempList">
+            <div class="card text-center centering">
+                <h2>{{temp.name}}</h2>
+                <div class="dot green" *ngIf="temp.status">
+                </div>
+                <div class="dot red" *ngIf="!temp.status">
+                </div>
+                <h3>{{temp.temp}}°C</h3>
             </div>
         </div>
-        <div class="col-md-4">
+    </div>
+    <div class="row mt-3" >
+        <div class="col-md-4" *ngFor="let onOff of onOffList">
             <div class="card text-center centering">
-                <h2>Bathtub</h2>
-                <div class="dot green">
+                <h2>{{onOff.name}}</h2>
+                <div class="dot green" *ngIf="onOff.status">
                 </div>
-                <h3>30°C</h3>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card text-center centering">
-                <h2>Oven</h2>
-                <div class="dot red">
+                <div class="dot red" *ngIf="!onOff.status">
                 </div>
-                <h3>0°C</h3>
             </div>
         </div>
     </div>

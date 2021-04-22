@@ -7,102 +7,100 @@ import {ListControl} from './list-control';
   styleUrls: ['./control.component.scss']
 })
 export class ControlComponent implements OnInit {
-  heaterHeat : number;
-  bathTubHeat : number;
-  bathTubStatus : boolean;
-  ovenHeat : number;
-  ovenStatus : boolean;
-  controlList : Array<ListControl>;
 
+  onOffList : Array<ListControl>;
+  tempList : Array<ListControl>;
   addInput = new FormControl('');
 
   constructor() { }
 
   ngOnInit(): void {
-    this.heaterHeat = 30;
-    this.bathTubStatus = false;
-    this.bathTubHeat = 36;
-    this.ovenStatus = true;
-    this.ovenHeat = 200;
-    this.controlList = new Array<ListControl>();
-    let listA = new ListControl();
-    listA.name = "Living room light";
-    listA.status = false;
 
-    let listB = new ListControl();
-    listB.name = "Garage door";
-    listB.status = false;
+    this.tempList = new Array<ListControl>();
+    let listD = new ListControl();
+    listD.name = "Tmp";
+    listD.status = false;
+    listD.temp = 24;
+    listD.id = 1;
 
-    let listC = new ListControl();
-    listC.name = "Living room window";
-    listC.status = false;
+    let listE = new ListControl();
+    listE.name = "Tmp";
+    listE.status = true;
+    listE.temp = 200;
+    listE.id = 2;
 
-    this.controlList.push(listA);
-    this.controlList.push(listB);
-    this.controlList.push(listC);
+
+    let listF = new ListControl();
+    listF.name = "Tmp";
+    listF.status = true;
+    listF.temp = 37;
+    listF.id = 3;
+
+    this.tempList.push(listD);
+    this.tempList.push(listE);
+    this.tempList.push(listF);
+
+    this.onOffList = new Array<ListControl>();
+    let listG = new ListControl();
+    listG.name = "Tmp";
+    listG.status = true;
+    listG.id = 4;
+
+    let listH = new ListControl();
+    listH.name = "Tmp";
+    listH.status = false;
+    listH.id = 5;
+
+
+    let listI = new ListControl();
+    listI.name = "Tmp";
+    listI.status = true;
+    listI.id = 6;
+
+    this.onOffList.push(listG);
+    this.onOffList.push(listH);
+    this.onOffList.push(listI);
+
+    //this.getData();
   }
 
-  changeHeat(op : string){
+  changeTemp(op : string, id : number){
+    let idx = this.tempList.findIndex(x => x.id == id);
     if(op == "+"){
-      if(this.heaterHeat + 1 <= 30){
-        this.heaterHeat++;
-      }
+      this.tempList[idx].temp++;
     }else{
-      if(this.heaterHeat - 1 >= 10){
-        this.heaterHeat--;
-      }
+      this.tempList[idx].temp--;
     }
   }
 
-  changeBathTubHeat(op : string){
-    if(op == "+"){
-      if(this.bathTubHeat + 1 <= 50){
-        this.bathTubHeat++;
-      }
+  changeTempStatus(id : number){
+    let idx = this.tempList.findIndex(x => x.id == id);
+    if(this.tempList[idx].status){
+      this.tempList[idx].status = false;
     }else{
-      if(this.bathTubHeat - 1 >= 15){
-        this.bathTubHeat--;
-      }
+      this.tempList[idx].status = true;
     }
   }
 
-  changeBathTubeStatus(){
-    if(this.bathTubStatus){
-      this.bathTubStatus = false;
+  changeOnOffStatus(id : number){
+    let idx = this.onOffList.findIndex(x => x.id == id);
+    if(this.onOffList[idx].status){
+      this.onOffList[idx].status = false;
     }else{
-      this.bathTubStatus = true;
+      this.onOffList[idx].status = true;
     }
   }
 
-  changeOvenStatus(){
-    if(this.ovenStatus){
-      this.ovenStatus = false;
+  applyChanges(type : string, id : number){
+    if(type == "t"){
+      let changeObject = this.tempList.find(x => x.id == id);
+      console.log(changeObject);
+      //api call
     }else{
-      this.ovenStatus = true;
+      let changeObject = this.onOffList.find(x => x.id == id);
+      console.log(changeObject);
+      //api call
     }
-  }
-
-  changeOvenHeat(op : string){
-    if(op == "+"){
-      if(this.ovenHeat + 1 <= 280){
-        this.ovenHeat++;
-      }
-    }else{
-      if(this.ovenHeat - 1 >= 50){
-        this.ovenHeat--;
-      }
-    }
-  }
-
-  addCustomControl(){
-    
-    let con = new ListControl();
-    console.log(this.addInput);
-    con.name = this.addInput.value;
-    console.log("hier");
-    con.status = false;
-    this.controlList.push(con);
-    this.addInput.setValue("");
   }
 
 }
