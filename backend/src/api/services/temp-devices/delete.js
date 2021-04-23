@@ -3,7 +3,6 @@ const { databaseName, tempTableName } = require('../../../database');
 const DB = require('../../../database');
 
 exports.deleteAllDevices = (onSuccess, onError) => {
-
     DB.connectDb((error, connection) => {
         if (error){
             onError(error.message);
@@ -35,7 +34,7 @@ exports.deleteDeviceById = (id, onSuccess, onError) => {
                     onSuccess();
                 }
                 else {
-                    onError('Entry not found', 404);
+                    onError('Device not found', 404);
                 }
                 
             });

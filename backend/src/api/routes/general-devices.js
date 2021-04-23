@@ -5,15 +5,15 @@ const checkAuthentication = require('../middleware/check-authentication');
 const GeneralDeviceController = require('../controllers/general-devices');
 
 
-router.get('/', checkAuthentication, GeneralDeviceController.generalDevices_get_all);
+router.get('/', GeneralDeviceController.generalDevices_get_all);
 
-router.post('/', checkAuthentication, GeneralDeviceController.generalDevices_post);
+router.post('/', GeneralDeviceController.generalDevices_post);
 
 router.delete('/', checkAuthentication, GeneralDeviceController.generalDevices_delete_all);
 
-router.get('/:deviceId', checkAuthentication, GeneralDeviceController.generalDevices_get_id);
+router.get('/:deviceId', GeneralDeviceController.generalDevices_get_id);
 
-router.patch('/:deviceId', checkAuthentication, GeneralDeviceController.generalDevices_patch_id);
+router.patch('/:deviceId', GeneralDeviceController.generalDevices_patch_id);
 
 router.delete('/:deviceId', checkAuthentication, GeneralDeviceController.generalDevices_delete_id);
 

@@ -7,7 +7,7 @@ exports.getAllDevices = (onSuccess, onError) => {
             onError(error.message)
         }
         else{
-            DB.getAllEntries(connection, (error, cursor) => {
+            DB.getAllTempDevices(connection, (error, cursor) => {
                 if (error) {
                     onError(error.message)
                 }
@@ -38,7 +38,7 @@ exports.getDeviceById = (id, onSuccess, onError) => {
                     onError(error.message, 500)
                 }
                 else if (result == null) {
-                    onError('Entry not found', 404);
+                    onError('Device not found', 404);
                 }
                 else {
                     onSuccess(result);

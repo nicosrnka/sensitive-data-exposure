@@ -2,7 +2,6 @@ const { databaseName, generalTableName } = require('../../../database');
 const DB = require('../../../database');
 
 exports.createNewDevice = (device, onSuccess, onError) => {
-    if (device.date && device.phValue !== undefined){
         DB.connectDb((error, connection) => {
             if (error){
                 onError(error.message);
@@ -16,7 +15,6 @@ exports.createNewDevice = (device, onSuccess, onError) => {
                         onSuccess(device);
                     }
                 });
-            } 
+            }
         });
-    }
 };
