@@ -7,7 +7,7 @@ exports.getAllDevices = (onSuccess, onError) => {
             onError(error.message)
         }
         else{
-            DB.getAllEntries(connection, (error, cursor) => {
+            DB.getAllGeneralDevices(connection, (error, cursor) => {
                 if (error) {
                     onError(error.message)
                 }

@@ -3,7 +3,6 @@ const { databaseName, tempTableName } = require('../../../database');
 const DB = require('../../../database');
 
 exports.deleteAllDevices = (onSuccess, onError) => {
-
     DB.connectDb((error, connection) => {
         if (error){
             onError(error.message);
