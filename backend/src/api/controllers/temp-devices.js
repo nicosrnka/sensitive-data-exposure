@@ -1,0 +1,109 @@
+const TempDeviceGetService = require('../services/temp-devices/get');
+const TempDeviceCreateService = require('../services/temp-devices/create');
+const TempDeviceUpdateService = require('../services/temp-devices/update');
+const TempDeviceDeleteService = require('../services/temp-devices/delete');
+
+exports.tempDevices_get_all = (request, response, next) => {
+    TempDeviceGetService.getAllDevices(onSuccess, onError);
+
+    function onSuccess(result) {
+        const resp = {
+            count: result.length,
+            entries: result
+        };
+        response.status(200).json(resp);
+    }
+
+    function onError(errorMessage) {
+        response.status(500).json({
+            message: errorMessage
+        });
+    }
+}
+
+exports.tempDevices_get_id = (request, response, next) => {
+    const id = request.params.entryId;
+    TempDeviceGetService.getDeviceById(id, onSuccess, onError)
+
+    function onSuccess(result) {
+        response.status(200).json(result);
+    }
+
+    function onError(errorMessage, status) {
+        response.status(status).json({
+            message: errorMessage
+        });
+    }
+};
+
+exports.tempDevices_post = (request, response, next) => {
+    TempDeviceCreateService.createNewDevice(request.body, onSuccess, onError);
+
+    function onSuccess(result) {
+        response.status(201).json({
+            message: 'Created new entry',
+            createdEntry: result
+        });
+    }
+
+    function onError(errorMessage) {
+        response.status(500).json({
+            message: errorMessage
+        });
+    }
+};
+
+exports.tempDevices_delete_all = (request, response, next) => {
+    TempDeviceDeleteService.deleteAllDevices(onSuccess, onError);
+
+    function onSuccess(result) {
+        const resp = {
+            count: result.deleted,
+            message: 'Deleted ' + result.deleted + ' entries'
+        };
+        response.status(200).json(resp);
+    }
+
+    function onError(errorMessage) {
+        response.status(500).json({
+            message: errorMessage
+        });
+    }
+};
+
+exports.tempDevices_patch_id = (request, response, next) => {
+    const id = request.params.entryId;
+    TempDeviceUpdateService.updateDeviceById(id, request.body, onSuccess, onError);
+    function onSuccess() {
+        response.status(200).json({
+            message: 'Updated entry',
+            request: {
+                type: 'GET',
+                url: 'http://localhost:' + process.env.PORT + '/diary-entries/' + id
+            }
+        });
+    }
+    function onError(errorMessage) {
+        response.status(500).json({
+            message: errorMessage
+        });
+    }
+};
+
+exports.tempDevices_delete_id = (request, response, next) => {
+    const id = request.params.entryId;
+    TempDeviceDeleteService.deleteDeviceById(id, onSuccess, onError);
+
+    function onSuccess() {
+        response.status(200).json({
+            message: 'Deleted entry',
+            deletedEntryId: id
+        });
+    };
+
+    function onError(errorMessage, status) {
+        response.status(status).json({
+            message: errorMessage
+        });
+    };
+};
