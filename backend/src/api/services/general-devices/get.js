@@ -38,7 +38,7 @@ exports.getDeviceById = (id, onSuccess, onError) => {
                     onError(error.message, 500)
                 }
                 else if (result == null) {
-                    onError('Entry not found', 404);
+                    onError('Device not found', 404);
                 }
                 else {
                     onSuccess(result);

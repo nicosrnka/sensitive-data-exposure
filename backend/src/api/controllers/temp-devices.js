@@ -9,7 +9,7 @@ exports.tempDevices_get_all = (request, response, next) => {
     function onSuccess(result) {
         const resp = {
             count: result.length,
-            entries: result
+            devices: result
         };
         response.status(200).json(resp);
     }
@@ -38,11 +38,10 @@ exports.tempDevices_get_id = (request, response, next) => {
 
 exports.tempDevices_post = (request, response, next) => {
     TempDeviceCreateService.createNewDevice(request.body, onSuccess, onError);
-
     function onSuccess(result) {
         response.status(201).json({
-            message: 'Created new entry',
-            createdEntry: result
+            message: 'Created new device',
+            createdDevice: result
         });
     }
 
@@ -59,7 +58,7 @@ exports.tempDevices_delete_all = (request, response, next) => {
     function onSuccess(result) {
         const resp = {
             count: result.deleted,
-            message: 'Deleted ' + result.deleted + ' entries'
+            message: 'Deleted ' + result.deleted + ' devices'
         };
         response.status(200).json(resp);
     }
@@ -76,10 +75,10 @@ exports.tempDevices_patch_id = (request, response, next) => {
     TempDeviceUpdateService.updateDeviceById(id, request.body, onSuccess, onError);
     function onSuccess() {
         response.status(200).json({
-            message: 'Updated entry',
+            message: 'Updated device',
             request: {
                 type: 'GET',
-                url: 'http://localhost:' + process.env.PORT + '/diary-entries/' + id
+                url: 'http://localhost:' + process.env.PORT + '/temp-devices/' + id
             }
         });
     }
@@ -96,8 +95,8 @@ exports.tempDevices_delete_id = (request, response, next) => {
 
     function onSuccess() {
         response.status(200).json({
-            message: 'Deleted entry',
-            deletedEntryId: id
+            message: 'Deleted device',
+            deletedDeviceId: id
         });
     };
 

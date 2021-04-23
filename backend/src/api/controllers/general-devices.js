@@ -9,7 +9,7 @@ exports.generalDevices_get_all = (request, response, next) => {
     function onSuccess(result) {
         const resp = {
             count: result.length,
-            entries: result
+            devices: result
         };
         response.status(200).json(resp);
     }
@@ -41,8 +41,8 @@ exports.generalDevices_post = (request, response, next) => {
 
     function onSuccess(result) {
         response.status(201).json({
-            message: 'Created new entry',
-            createdEntry: result
+            message: 'Created new device',
+            createdDevice: result
         });
     }
 
@@ -59,7 +59,7 @@ exports.generalDevices_delete_all = (request, response, next) => {
     function onSuccess(result) {
         const resp = {
             count: result.deleted,
-            message: 'Deleted ' + result.deleted + ' entries'
+            message: 'Deleted ' + result.deleted + ' devices'
         };
         response.status(200).json(resp);
     }
@@ -76,10 +76,10 @@ exports.generalDevices_patch_id = (request, response, next) => {
     GeneralDeviceUpdateService.updateDeviceById(id, request.body, onSuccess, onError);
     function onSuccess() {
         response.status(200).json({
-            message: 'Updated entry',
+            message: 'Updated device',
             request: {
                 type: 'GET',
-                url: 'http://localhost:' + process.env.PORT + '/diary-entries/' + id
+                url: 'http://localhost:' + process.env.PORT + '/general-devices/' + id
             }
         });
     }
@@ -96,8 +96,8 @@ exports.generalDevices_delete_id = (request, response, next) => {
 
     function onSuccess() {
         response.status(200).json({
-            message: 'Deleted entry',
-            deletedEntryId: id
+            message: 'Deleted device',
+            deletedDeviceId: id
         });
     };
 

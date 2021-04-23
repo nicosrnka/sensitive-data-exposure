@@ -34,7 +34,7 @@ exports.deleteDeviceById = (id, onSuccess, onError) => {
                     onSuccess();
                 }
                 else {
-                    onError('Entry not found', 404);
+                    onError('Device not found', 404);
                 }
                 
             });
