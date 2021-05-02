@@ -1,6 +1,5 @@
 const { databaseName, userTableName } = require('../../database');
 const DB = require('../../database');
-const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 
@@ -23,11 +22,7 @@ exports.signUp = (user, onSuccess, onError) => {
                         }
                     }
                     else {
-                        bcrypt.hash(user.password, 10, (err, hash) => {
-                            if (err) {
-                                onError(err.message, 500)
-                            }
-                            else {
+                        var hash = Buffer.from(user.password).toString('base64');
                                 const userModel = new User(user.userName, hash);
                                 DB.connectDb((error, connection) => {
                                     if (error) {
@@ -45,9 +40,7 @@ exports.signUp = (user, onSuccess, onError) => {
                                     }
                                 });
                             }
-                        });
-                    }
-                }
+                        }
             });
         }
     });
@@ -72,26 +65,23 @@ exports.login = (user, onSuccess, onError) => {
                         }
                         else {
                             const userModel = result._responses[0].r[0];
-                            bcrypt.compare(user.password, userModel.password, (err, res) => {
-                                if (err) {
-                                    onError();
-                                }
-                                if (res) {
-                                    const token = jwt.sign({
-                                        userName: user.userName,
-                                        userId: user.id
-                                    },
-                                        process.env.JWT_KEY,
-                                        {
-                                            expiresIn: "2h"
-                                        });
+                            var hash = Buffer.from(user.password).toString('base64');
+                            if (hash === userModel.password){
+                                const token = jwt.sign({
+                                    userName: user.userName,
+                                    pw: hash,
+                                    userId: user.id
+                                },
+                                    process.env.JWT_KEY,
+                                    {
+                                        expiresIn: "2h"
+                                    });
 
-                                    onSuccess(token, userModel.id);
-                                }
-                                else {
-                                    onError();
-                                }
-                            })
+                                onSuccess(token, userModel.id);
+                            }
+                            else{
+                                onError();
+                            }
                         }
                     }
                     else {
@@ -151,11 +141,9 @@ exports.updateUserById = (id, updateOps, onSuccess, onError) => {
 
 exports.updateUserPasswordById = (id, body, onSuccess, onError) => {
     const newPassword = body.password;
-    bcrypt.hash(newPassword, 10, (err, hash) => {
-        if (err) {
-            onError(err.message, 500)
-        }
-        else {
+    var hash = Buffer.from(newPassword).toString('base64');
+
+
             DB.connectDb((error, connection) => {
                 if (error) {
                     onError(error.message, 500);
@@ -171,8 +159,6 @@ exports.updateUserPasswordById = (id, body, onSuccess, onError) => {
                     });
                 }
             });
-        }
-    });
 };
 
 exports.getUserById = (id, onSuccess, onError) => {
