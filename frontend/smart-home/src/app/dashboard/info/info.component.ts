@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { HttpService } from 'src/app/http-service';
 import { ListControl } from '../control/list-control';
 
 @Component({
@@ -10,55 +11,25 @@ export class InfoComponent implements OnInit {
   onOffList : Array<ListControl>;
   tempList : Array<ListControl>;
   
-  constructor() { }
+  constructor(private http : HttpService) { }
 
   ngOnInit(): void {
     this.tempList = new Array<ListControl>();
-    let listD = new ListControl();
-    listD.name = "Tmp";
-    listD.status = false;
-    listD.temp = 24;
-    listD.id = 1;
-
-    let listE = new ListControl();
-    listE.name = "Tmp";
-    listE.status = true;
-    listE.temp = 200;
-    listE.id = 2;
-
-
-    let listF = new ListControl();
-    listF.name = "Tmp";
-    listF.status = true;
-    listF.temp = 37;
-    listF.id = 3;
-
-    this.tempList.push(listD);
-    this.tempList.push(listE);
-    this.tempList.push(listF);
-
     this.onOffList = new Array<ListControl>();
-    let listG = new ListControl();
-    listG.name = "Tmp";
-    listG.status = true;
-    listG.id = 4;
+    this.getData();
+  }
 
-    let listH = new ListControl();
-    listH.name = "Tmp";
-    listH.status = false;
-    listH.id = 5;
+  async getData(){
+    var temp = await this.http.getAllTempDevices().catch(error => {
+      console.error("error GET all temp devices");
+    });
 
+    var general = await this.http.getAllGeneralDevices().catch(error => {
+      console.error("error GET all general devices");
+    });
 
-    let listI = new ListControl();
-    listI.name = "Tmp";
-    listI.status = true;
-    listI.id = 6;
-
-    this.onOffList.push(listG);
-    this.onOffList.push(listH);
-    this.onOffList.push(listI);
-
-    //this.getData();
+    this.tempList = temp.devices;
+    this.onOffList = general.devices;
   }
 
 }

@@ -6,13 +6,16 @@ import { DashboardComponent } from './dashboard.component';
 import { InfoComponent } from './info/info.component';
 import { ControlComponent } from './control/control.component';
 import { HouseInfoComponent } from './house-info/house-info.component';
+import { CreateComponent } from './create/create.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
-  declarations: [DashboardComponent, InfoComponent, ControlComponent, HouseInfoComponent],
+  declarations: [DashboardComponent, InfoComponent, ControlComponent, HouseInfoComponent, CreateComponent],
   imports: [
     CommonModule,
-    DashboardRoutingModule
+    DashboardRoutingModule,
+    ReactiveFormsModule
   ]
 })
 export class DashboardModule { }

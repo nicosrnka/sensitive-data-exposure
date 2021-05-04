@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { HttpService } from 'src/app/http-service';
 import {ListControl} from './list-control';
 @Component({
   selector: 'app-control',
@@ -12,59 +13,15 @@ export class ControlComponent implements OnInit {
   tempList : Array<ListControl>;
   addInput = new FormControl('');
 
-  constructor() { }
+  constructor(private http : HttpService) { }
 
   ngOnInit(): void {
-
     this.tempList = new Array<ListControl>();
-    let listD = new ListControl();
-    listD.name = "Tmp";
-    listD.status = false;
-    listD.temp = 24;
-    listD.id = 1;
-
-    let listE = new ListControl();
-    listE.name = "Tmp";
-    listE.status = true;
-    listE.temp = 200;
-    listE.id = 2;
-
-
-    let listF = new ListControl();
-    listF.name = "Tmp";
-    listF.status = true;
-    listF.temp = 37;
-    listF.id = 3;
-
-    this.tempList.push(listD);
-    this.tempList.push(listE);
-    this.tempList.push(listF);
-
     this.onOffList = new Array<ListControl>();
-    let listG = new ListControl();
-    listG.name = "Tmp";
-    listG.status = true;
-    listG.id = 4;
-
-    let listH = new ListControl();
-    listH.name = "Tmp";
-    listH.status = false;
-    listH.id = 5;
-
-
-    let listI = new ListControl();
-    listI.name = "Tmp";
-    listI.status = true;
-    listI.id = 6;
-
-    this.onOffList.push(listG);
-    this.onOffList.push(listH);
-    this.onOffList.push(listI);
-
-    //this.getData();
+    this.getData();
   }
 
-  changeTemp(op : string, id : number){
+  changeTemp(op : string, id : string){
     let idx = this.tempList.findIndex(x => x.id == id);
     if(op == "+"){
       this.tempList[idx].temp++;
@@ -73,7 +30,7 @@ export class ControlComponent implements OnInit {
     }
   }
 
-  changeTempStatus(id : number){
+  changeTempStatus(id : string){
     let idx = this.tempList.findIndex(x => x.id == id);
     if(this.tempList[idx].status){
       this.tempList[idx].status = false;
@@ -82,7 +39,7 @@ export class ControlComponent implements OnInit {
     }
   }
 
-  changeOnOffStatus(id : number){
+  changeOnOffStatus(id : string){
     let idx = this.onOffList.findIndex(x => x.id == id);
     if(this.onOffList[idx].status){
       this.onOffList[idx].status = false;
@@ -91,16 +48,30 @@ export class ControlComponent implements OnInit {
     }
   }
 
-  applyChanges(type : string, id : number){
+  async applyChanges(type : string, id : string){
     if(type == "t"){
       let changeObject = this.tempList.find(x => x.id == id);
       console.log(changeObject);
-      //api call
+      await this.http.updateTempDevice(changeObject.name, changeObject.status, changeObject.temp, changeObject.id);
     }else{
       let changeObject = this.onOffList.find(x => x.id == id);
       console.log(changeObject);
-      //api call
+      await this.http.updateGeneralDevice(changeObject.name, changeObject.status, changeObject.id);
     }
+  }
+
+  async getData(){
+    var temp = await this.http.getAllTempDevices().catch(error => {
+      console.error("error GET all temp devices");
+    });
+
+    var general = await this.http.getAllGeneralDevices().catch(error => {
+      console.error("error GET all general devices");
+    });
+    console.log(temp);
+    console.log(general);
+    this.tempList = temp.devices;
+    this.onOffList = general.devices;
   }
 
 }

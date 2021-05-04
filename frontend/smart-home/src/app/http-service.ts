@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class HttpService {
-  private APIURL = 'https://localhost:3000/';
+  private APIURL = 'http://localhost:3000/';
 
   constructor(private http: HttpClient) {}
 
@@ -24,7 +24,7 @@ export class HttpService {
 
   public login(username : string, password : string): Promise<any> {
     return this.http
-      .post<any>(this.APIURL + 'user/login', {username : username, password : password})
+      .post<any>(this.APIURL + 'user/login', {userName : username, password : password})
       .toPromise();
   }
 
@@ -34,9 +34,9 @@ export class HttpService {
       .toPromise();
   }
 
-  public createNewGeneralDevice(name : string, status : boolean, temp : number): Promise<any> {
+  public createNewGeneralDevice(name : string, status : boolean): Promise<any> {
     return this.http
-      .post<any>(this.APIURL + 'general-devices', {name : name, status : status, temp : temp})
+      .post<any>(this.APIURL + 'general-devices', {name : name, status : status})
       .toPromise();
   }
 
@@ -48,7 +48,7 @@ export class HttpService {
 
   public updateTempDevice(name : string, status : boolean, temp : number, id : string): Promise<any> {
     return this.http
-      .patch<any>(this.APIURL + 'temp-devices/' + id, {name : name, status : status, temp : temp})
+      .patch<any>(this.APIURL + 'temp-devices/' + id, [{"propName": "name", "value" : name}, {"propName": "temp", "value" : temp}, {"propName": "status", "value" : status}])
       .toPromise();
   }
 
