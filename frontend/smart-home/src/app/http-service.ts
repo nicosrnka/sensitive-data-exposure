@@ -41,14 +41,16 @@ export class HttpService {
   }
 
   public updateGeneralDevice(name : string, status : boolean, id : string): Promise<any> {
+    var tmp = [{"propName": "name", "value" : name}, {"propName": "status", "value" : status}];
     return this.http
-      .patch<any>(this.APIURL + 'general-devices/' + id, {name : name, status : status})
+      .patch<any>(this.APIURL + 'general-devices/' + id, tmp)
       .toPromise();
   }
 
   public updateTempDevice(name : string, status : boolean, temp : number, id : string): Promise<any> {
+    var tmp = [{"propName": "name", "value" : name}, {"propName": "temp", "value" : temp}, {"propName": "status", "value" : status}];
     return this.http
-      .patch<any>(this.APIURL + 'temp-devices/' + id, [{"propName": "name", "value" : name}, {"propName": "temp", "value" : temp}, {"propName": "status", "value" : status}])
+      .patch<any>(this.APIURL + 'temp-devices/' + id, tmp)
       .toPromise();
   }
 

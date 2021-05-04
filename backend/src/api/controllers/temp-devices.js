@@ -22,7 +22,8 @@ exports.tempDevices_get_all = (request, response, next) => {
 }
 
 exports.tempDevices_get_id = (request, response, next) => {
-    const id = request.params.entryId;
+    const id = request.params.deviceId;
+    debugger;
     TempDeviceGetService.getDeviceById(id, onSuccess, onError)
 
     function onSuccess(result) {
@@ -71,7 +72,7 @@ exports.tempDevices_delete_all = (request, response, next) => {
 };
 
 exports.tempDevices_patch_id = (request, response, next) => {
-    const id = request.params.entryId;
+    const id = request.params.deviceId;
     TempDeviceUpdateService.updateDeviceById(id, request.body, onSuccess, onError);
     function onSuccess() {
         response.status(200).json({
@@ -90,7 +91,7 @@ exports.tempDevices_patch_id = (request, response, next) => {
 };
 
 exports.tempDevices_delete_id = (request, response, next) => {
-    const id = request.params.entryId;
+    const id = request.params.deviceId;
     TempDeviceDeleteService.deleteDeviceById(id, onSuccess, onError);
 
     function onSuccess() {

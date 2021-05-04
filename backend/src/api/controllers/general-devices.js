@@ -22,7 +22,7 @@ exports.generalDevices_get_all = (request, response, next) => {
 }
 
 exports.generalDevices_get_id = (request, response, next) => {
-    const id = request.params.entryId;
+    const id = request.params.deviceId;
     GeneralDeviceGetService.getDeviceById(id, onSuccess, onError)
 
     function onSuccess(result) {
@@ -72,7 +72,7 @@ exports.generalDevices_delete_all = (request, response, next) => {
 };
 
 exports.generalDevices_patch_id = (request, response, next) => {
-    const id = request.params.entryId;
+    const id = request.params.deviceId;
     GeneralDeviceUpdateService.updateDeviceById(id, request.body, onSuccess, onError);
     function onSuccess() {
         response.status(200).json({
@@ -91,7 +91,7 @@ exports.generalDevices_patch_id = (request, response, next) => {
 };
 
 exports.generalDevices_delete_id = (request, response, next) => {
-    const id = request.params.entryId;
+    const id = request.params.deviceId;
     GeneralDeviceDeleteService.deleteDeviceByI(id, onSuccess, onError);
 
     function onSuccess() {
