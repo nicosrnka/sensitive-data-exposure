@@ -123,6 +123,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "smart-home"
+    }
+  },
+  "defaultProject": "smart-home",
+  "cli": {
+    "analytics": false
+  }
 }
