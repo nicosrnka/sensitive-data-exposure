@@ -22,7 +22,7 @@ export class LoginComponent implements OnInit {
   });
 
   async submitLogin() {
-    var loginReturn = await this.http.login(this.loginForm.get("username").value, hash(this.loginForm.get("password").value)).catch(err => {
+    var loginReturn = await this.http.login(this.loginForm.get("username").value,this.loginForm.get("password").value).catch(err => {
       console.log("error");
     });
 

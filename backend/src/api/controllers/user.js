@@ -2,7 +2,6 @@ const UserService = require('../services/user');
 
 exports.user_create = (request, response, next) => {
     UserService.signUp(request.body, onSuccess, onError);
-
     function onSuccess() {
         response.status(201).json({
             message: 'New user created'
