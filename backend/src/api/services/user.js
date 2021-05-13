@@ -2,6 +2,7 @@ const { databaseName, userTableName } = require('../../database');
 const DB = require('../../database');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
+const bcrypt = require('bcrypt');
 
 exports.signUp = (user, onSuccess, onError) => {
     DB.connectDb((error, connection) => {
@@ -22,29 +23,34 @@ exports.signUp = (user, onSuccess, onError) => {
                         }
                     }
                     else {
-                        var hash = Buffer.from(user.password).toString('base64');
-                                const userModel = new User(user.userName, hash);
-                                DB.connectDb((error, connection) => {
-                                    if (error) {
-                                        onError(error.message, 500);
-                                    }
-                                    else {
-                                        DB.r.db(databaseName).table(userTableName).insert(userModel).run(connection, (error, resultInsert) => {
-                                            if (error) {
-                                                onError(error.message, 500);
-                                            }
-                                            else {
-                                                onSuccess();
-                                            }
-                                        });
-                                    }
-                                });
-                            }
-                        }
+                        // var hash = Buffer.from(user.password).toString('base64');
+                        bcrypt.hash(user.password, 10, (err, password) => {
+
+                            const userModel = new User(user.userName, password);
+                            DB.connectDb((error, connection) => {
+                                if (error) {
+                                    onError(error.message, 500);
+                                }
+                                else {
+                                    DB.r.db(databaseName).table(userTableName).insert(userModel).run(connection, (error, resultInsert) => {
+                                        if (error) {
+                                            onError(error.message, 500);
+                                        }
+                                        else {
+                                            onSuccess();
+                                        }
+                                    });
+                                }
+                            });
+                        })
+                    }
+                              
+                    
+                }
             });
         }
     });
-};
+}
 
 exports.login = (user, onSuccess, onError) => {
     DB.connectDb((error, connection) => {
@@ -65,23 +71,34 @@ exports.login = (user, onSuccess, onError) => {
                         }
                         else {
                             const userModel = result._responses[0].r[0];
-                            var hash = Buffer.from(user.password).toString('base64');
-                            if (hash === userModel.password){
-                                const token = jwt.sign({
-                                    userName: user.userName,
-                                    pw: hash,
-                                    userId: user.id
-                                },
-                                    process.env.JWT_KEY,
-                                    {
-                                        expiresIn: "2h"
-                                    });
+                            //  var hash = Buffer.from(user.password).toString('base64');
 
-                                onSuccess(token, userModel.id);
-                            }
-                            else{
-                                onError();
-                            }
+                            console.log(user.password)
+                            console.log(userModel.password)
+                            bcrypt.compare(user.password, userModel.password, (err, areSame) => {
+
+                                if (areSame) {
+                                    const token = jwt.sign({
+                                        userName: user.userName,
+                                        pw: user.password,
+                                        userId: user.id
+                                    },
+                                        process.env.JWT_KEY,
+                                        {
+                                            expiresIn: "2h"
+                                        });
+
+                                    onSuccess(token, userModel.id);
+                                }
+                                else {
+                                    onError();
+                                }
+
+                            });
+
+
+                           
+                            
                         }
                     }
                     else {
@@ -126,12 +143,12 @@ exports.updateUserById = (id, updateOps, onSuccess, onError) => {
         if (error) {
             onError(error.message);
         }
-        else{
+        else {
             DB.r.db(databaseName).table(userTableName).get(id).update(updOps).run(connection, (error, result) => {
                 if (error) {
                     onError(error.message);
                 }
-                else{
+                else {
                     onSuccess();
                 }
             });
@@ -144,21 +161,21 @@ exports.updateUserPasswordById = (id, body, onSuccess, onError) => {
     var hash = Buffer.from(newPassword).toString('base64');
 
 
-            DB.connectDb((error, connection) => {
+    DB.connectDb((error, connection) => {
+        if (error) {
+            onError(error.message, 500);
+        }
+        else {
+            DB.r.db(databaseName).table(userTableName).get(id).update({ password: hash }).run(connection, (error, result) => {
                 if (error) {
-                    onError(error.message, 500);
+                    onError(error.message);
                 }
                 else {
-                    DB.r.db(databaseName).table(userTableName).get(id).update({password: hash}).run(connection, (error, result) => {
-                        if (error) {
-                            onError(error.message);
-                        }
-                        else{
-                            onSuccess();
-                        }
-                    });
+                    onSuccess();
                 }
             });
+        }
+    });
 };
 
 exports.getUserById = (id, onSuccess, onError) => {
@@ -166,7 +183,7 @@ exports.getUserById = (id, onSuccess, onError) => {
         if (error) {
             onError(error.message, 500)
         }
-        else{
+        else {
             DB.r.db(databaseName).table(userTableName).get(id).run(connection, (error, result) => {
                 if (error) {
                     onError(error.message, 500)
