@@ -27,9 +27,9 @@ export class LoginComponent implements OnInit {
     });
 
     if (loginReturn) {
-      localStorage.setItem("token", loginReturn.token);
-      localStorage.setItem("id", loginReturn.id);
-      localStorage.setItem("isLoggedIn", "true");
+      sessionStorage.setItem("token", loginReturn.token);
+      sessionStorage.setItem("id", loginReturn.id);
+      sessionStorage.setItem("isLoggedIn", "true");
       this.router.navigateByUrl("/dashboard/info");
     } else {
       console.error("failed login");
