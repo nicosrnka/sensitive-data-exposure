@@ -22,7 +22,7 @@ export class AuthGuard implements CanActivate {
   public isLoggedIn(): boolean {
     let status = false;
     if (
-      sessionStorage.getItem('isLoggedIn') == 'true'
+      sessionStorage.getItem('token') !== ""
     ) {
       status = true;
     } else {
@@ -32,7 +32,6 @@ export class AuthGuard implements CanActivate {
   }
 
   logout(): void {
-    sessionStorage.setItem('isLoggedIn', 'false');
     sessionStorage.removeItem('token');
     sessionStorage.removeItem('id');
   }
